@@ -20,9 +20,6 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client', 'build', 'index.html'));
-});
 
 // 포트 설정: 환경 변수에서 PORT를 가져오고, 없을 경우 기본값으로 3000 사용
 // app.set('port', process.env.PORT || 8080);
@@ -30,8 +27,8 @@ app.get('*', (req, res) => {
 // ✅ 시퀄라이즈 싱크
 // - 데이터베이스 테이블 생성 또는 동기화
 sequelize.sync({ force: false })
-  .then(() => {
-    console.log('데이터베이스 연결 성공');
+.then(() => {
+  console.log('데이터베이스 연결 성공');
   })
   .catch((err) => {
     console.error(err);
@@ -62,7 +59,7 @@ app.use(session({
   resave: false,                            // 세션 데이터가 변경되지 않으면 서버에 다시 저장하지 않음
   saveUninitialized: false,                 // 초기화되지 않은 세션을 저장소에 저장하지 않음
   secret: process.env.COOKIE_SECRET,        // 세션 식별을 위한 비밀 키
-
+  
   // 세션 쿠키 설정
   cookie: {
     httpOnly: true,                         // 브라우저에서 쿠키에 접근할 때만 가능하도록 httpOnly 속성 사용
@@ -74,8 +71,11 @@ app.use(session({
 
 // 👩‍💻 라우터 설정
 app.use('/', indexRouter);
-app.use('/todo', todoRouter);
+app.use('/todos', todoRouter);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client', 'public', 'index.html'));
+});
 // 404 오류 처리 미들웨어
 app.use((req, res, next) => {
   // 요청된 경로가 존재하지 않을 때 404 상태 코드와 'Not Found' 메시지를 응답으로 전송

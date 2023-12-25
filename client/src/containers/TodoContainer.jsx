@@ -41,8 +41,11 @@ const TodoContainer = () => {
 
     try {
       const response = await fetch('http://localhost:8080/todos', init);
+      console.log(response);
       const newTodo = await response.json();
+      console.log(newTodo);
       const updatedList = [newTodo, ...todoList]
+      console.log(updatedList);
       setTodoList( updatedList );
     } catch (error) {
       console.log(error);
